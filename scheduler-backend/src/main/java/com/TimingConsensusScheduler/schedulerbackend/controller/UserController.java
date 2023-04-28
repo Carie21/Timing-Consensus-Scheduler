@@ -1,9 +1,13 @@
 package com.TimingConsensusScheduler.schedulerbackend.controller;
 
 import com.TimingConsensusScheduler.schedulerbackend.exception.UserNotFoundException;
+import com.TimingConsensusScheduler.schedulerbackend.model.Schedule;
 import com.TimingConsensusScheduler.schedulerbackend.model.User;
+import com.TimingConsensusScheduler.schedulerbackend.repository.ScheduleRepository;
 import com.TimingConsensusScheduler.schedulerbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +19,13 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ScheduleRepository scheduleRepository;
+
     @PostMapping("/user")
     User newUser(@RequestBody User newUser){
+//        Schedule _schedule = new Schedule(newUser.getMember_id());
+        scheduleRepository.save(new Schedule(newUser.getMember_id()));
         return userRepository.save(newUser);
     }
 
@@ -30,11 +39,16 @@ public class UserController {
         return userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
     }
 
+    @GetMapping("/usercheck/{email}")
+    User getUserBy (@PathVariable Long id){
+        return userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
+    }
+
     @PutMapping("/user/{id}")
     User updateUser(@RequestBody User newUser, @PathVariable Long id){
         return userRepository.findById(id).map(user->{
-            user.setUsername(newUser.getUsername());
-            user.setName(newUser.getName());
+            user.setMember_name(newUser.getMember_name());
+            user.setPassword(newUser.getPassword());
             user.setEmail(newUser.getEmail());
             return userRepository.save(user);
         }).orElseThrow(()->new UserNotFoundException(id));

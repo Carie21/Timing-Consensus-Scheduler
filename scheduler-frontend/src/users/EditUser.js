@@ -8,12 +8,13 @@ export default function EditUser() {
   const { id } = useParams();
 
   const [user, setUser] = useState({
-    name: "",
-    username: "",
+    member_name: "",
     email: "",
+    password: "",
+    role: "",
   });
 
-  const { name, username, email } = user;
+  const { member_name, password, email,role } = user;
 
   const onInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -49,21 +50,21 @@ export default function EditUser() {
                 type={"text"}
                 className="form-control"
                 placeholder="Enter your name"
-                name="name"
-                value={name}
+                name="member_name"
+                value={member_name}
                 onChange={(e) => onInputChange(e)}
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="Username" className="form-label">
-                Username
+              <label htmlFor="Password" className="form-label">
+                Password
               </label>
               <input
                 type={"text"}
                 className="form-control"
-                placeholder="Enter your username"
-                name="username"
-                value={username}
+                placeholder="Enter your password"
+                name="password"
+                value={password}
                 onChange={(e) => onInputChange(e)}
               />
             </div>
@@ -77,6 +78,19 @@ export default function EditUser() {
                 placeholder="Enter your e-mail address"
                 name="email"
                 value={email}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Role" className="form-label">
+                Role
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your role"
+                name="role"
+                value={role}
                 onChange={(e) => onInputChange(e)}
               />
             </div>

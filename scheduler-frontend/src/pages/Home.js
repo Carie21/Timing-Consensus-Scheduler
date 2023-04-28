@@ -27,11 +27,11 @@ export default function Home() {
         <table className="table border shadow">
           <thead>
             <tr>
-              <th scope="col">S.N</th>
+              <th scope="col">id</th>
               <th scope="col">Name</th>
-              <th scope="col">Username</th>
+              <th scope="col">password</th>
               <th scope="col">Email</th>
-              <th scope="col">Action</th>
+              <th scope="col">action</th>
             </tr>
           </thead>
           <tbody>
@@ -40,25 +40,25 @@ export default function Home() {
                 <th scope="row" key={index}>
                   {index + 1}
                 </th>
-                <td>{user.name}</td>
-                <td>{user.username}</td>
+                <td>{user.member_name}</td>
+                <td>{user.password}</td>
                 <td>{user.email}</td>
                 <td>
                   <Link
                     className="btn btn-primary mx-2"
-                    to={`/viewuser/${user.id}`}
+                    to={`/viewuser/${user.member_id}`}
                   >
                     View
                   </Link>
                   <Link
                     className="btn btn-outline-primary mx-2"
-                    to={`/edituser/${user.id}`}
+                    to={`/edituser/${user.member_id}`}
                   >
                     Edit
                   </Link>
                   <button
                     className="btn btn-danger mx-2"
-                    onClick={() => deleteUser(user.id)}
+                    onClick={() => deleteUser(user.member_id)}
                   >
                     Delete
                   </button>

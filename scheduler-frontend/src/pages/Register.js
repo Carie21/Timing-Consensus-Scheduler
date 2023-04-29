@@ -1,97 +1,99 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link,useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-export default function Register() {
+const Register = () => {
+  // const history = useHistory();
   let navigate = useNavigate();
 
-  const [user, setUser] = useState({
-    member_name: "",
-    email: "",
-    password: "",
-    role: "",
+  const [user, setuser] = useState({
+    member_name: '',
+    email: '',
+    password: '',
+    role: false,
   });
 
-  const { member_name, password, email,role } = user;
-
-  const onInputChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+      await axios.post(
+        'http://localhost:8080/api/register',
+        user
+      );
+      navigate("/");
+    
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    await axios.post("http://localhost:8080/user", user);
-    navigate("/");
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setuser({ ...user, [name]: value });
   };
 
   return (
     <div className="container">
       <div className="row">
         <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
-          <h2 className="text-center m-4">Register User</h2>
-
-          <form onSubmit={(e) => onSubmit(e)}>
-            <div className="mb-3">
-              <label htmlFor="Name" className="form-label">
-                Name
-              </label>
+          <h2 className="text-center m-4">Registration</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="member_name">Name</label>
               <input
-                type={"text"}
+                type="text"
                 className="form-control"
-                placeholder="Enter your name"
+                id="member_name"
                 name="member_name"
-                value={member_name}
-                onChange={(e) => onInputChange(e)}
+                value={user.member_name}
+                onChange={handleChange}
+                required
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="Password" className="form-label">
-                Password
-              </label>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
               <input
-                type={"text"}
+                type="email"
                 className="form-control"
-                placeholder="Enter your password"
-                name="password"
-                value={password}
-                onChange={(e) => onInputChange(e)}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="Email" className="form-label">
-                E-mail
-              </label>
-              <input
-                type={"text"}
-                className="form-control"
-                placeholder="Enter your e-mail address"
+                id="email"
                 name="email"
-                value={email}
-                onChange={(e) => onInputChange(e)}
+                value={user.email}
+                onChange={handleChange}
+                required
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="Role" className="form-label">
-                Role
-              </label>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
               <input
-                type={"text"}
+                type="password"
                 className="form-control"
-                placeholder="Enter your role"
-                name="role"
-                value={role}
-                onChange={(e) => onInputChange(e)}
+                id="password"
+                name="password"
+                value={user.password}
+                onChange={handleChange}
+                required
               />
             </div>
-            <button type="submit" className="btn btn-outline-primary">
-              Submit
+            <div className="form-group">
+              <label htmlFor="role">Role:</label>
+              <select
+               className="form-control"
+                id="role"
+                name="role"
+                value={user.role}
+                onChange={handleChange}
+                >
+                <option value={true}>Admin</option>
+                <option value={false}>User</option>
+                </select>
+            </div>
+            <button type="submit" className="btn btn-primary">
+              Register
             </button>
-            <Link className="btn btn-outline-danger mx-2" to="/">
-              Cancel
-            </Link>
           </form>
+          <p className="mt-3">
+            Already have an account? <Link to="/login">Login</Link>
+          </p>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Register;

@@ -1,106 +1,105 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-export default function EditUser() {
-  let navigate = useNavigate();
-
-  const { id } = useParams();
-
+export default function ViewUser() {
   const [user, setUser] = useState({
     member_name: "",
     email: "",
     password: "",
     role: "",
+    slots_taken: [
+      [false, false],
+      [false, false],
+    ],
   });
 
-  const { member_name, password, email,role } = user;
-
-  const onInputChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+  const { id } = useParams();
 
   useEffect(() => {
     loadUser();
   }, []);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    await axios.put(`http://localhost:8080/user/${id}`, user);
-    navigate("/");
+  const loadUser = async () => {
+    const result = await axios.get(`http://localhost:8080/api/users/${id}`);
+    setUser(result.data);
   };
 
-  const loadUser = async () => {
-    const result = await axios.get(`http://localhost:8080/user/${id}`);
-    setUser(result.data);
+  const handleCellClick = (row, col) => {
+    const newSlotsTaken = user.slots_taken.map((rowArr, i) =>
+      i === row ? rowArr.map((isTaken, j) => (j === col ? !isTaken : isTaken)) : rowArr
+    );
+    setUser({ ...user, slots_taken: newSlotsTaken });
+  };
+
+  const cellStyle = (isTaken) => ({
+    backgroundColor: isTaken ? "red" : "green",
+    cursor: "pointer",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(`http://localhost:8080/api/users/${id}`, user);
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="container">
       <div className="row">
         <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
-          <h2 className="text-center m-4">Edit User</h2>
+          <h2 className="text-center m-4">User Details</h2>
 
-          <form onSubmit={(e) => onSubmit(e)}>
-            <div className="mb-3">
-              <label htmlFor="Name" className="form-label">
-                Name
-              </label>
-              <input
-                type={"text"}
-                className="form-control"
-                placeholder="Enter your name"
-                name="member_name"
-                value={member_name}
-                onChange={(e) => onInputChange(e)}
-              />
+          <div className="card">
+            <div className="card-header">
+              Details of user id : {user.member_id}
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item">
+                  <b>Name:</b>
+                  {user.member_name}
+                </li>
+                <li className="list-group-item">
+                  <b>email:</b>
+                  {user.email}
+                </li>
+                <li className="list-group-item">
+                  <b>Role:</b>
+                  {user.role}
+                </li>
+              </ul>
             </div>
-            <div className="mb-3">
-              <label htmlFor="Password" className="form-label">
-                Password
-              </label>
-              <input
-                type={"text"}
-                className="form-control"
-                placeholder="Enter your password"
-                name="password"
-                value={password}
-                onChange={(e) => onInputChange(e)}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="Email" className="form-label">
-                E-mail
-              </label>
-              <input
-                type={"text"}
-                className="form-control"
-                placeholder="Enter your e-mail address"
-                name="email"
-                value={email}
-                onChange={(e) => onInputChange(e)}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="Role" className="form-label">
-                Role
-              </label>
-              <input
-                type={"text"}
-                className="form-control"
-                placeholder="Enter your role"
-                name="role"
-                value={role}
-                onChange={(e) => onInputChange(e)}
-              />
-            </div>
-            <button type="submit" className="btn btn-outline-primary">
-              Submit
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <table>
+              <tbody>
+                {user.slots_taken.map((row, i) => (
+                  <tr key={i}>
+                    {row.map((isTaken, j) => (
+                      <td
+                        key={`${i}-${j}`}
+                        style={cellStyle(isTaken)}
+                        onClick={() => handleCellClick(i, j)}
+                      >
+                        {isTaken ? "Taken" : "Available"}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <button type="submit" className="btn btn-primary my-2">
+              Save Changes
             </button>
-            <Link className="btn btn-outline-danger mx-2" to="/">
-              Cancel
-            </Link>
           </form>
+
+          <Link className="btn btn-secondary my-2" to={"/"}>
+            Cancel
+          </Link>
         </div>
       </div>
     </div>

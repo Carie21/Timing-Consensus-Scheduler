@@ -7,7 +7,7 @@ export default function ViewUser() {
     member_name: "",
     email: "",
     password: "",
-    role: "",
+    role: false,
   });
 
 

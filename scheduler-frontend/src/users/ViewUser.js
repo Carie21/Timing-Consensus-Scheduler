@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 export default function ViewUser() {
@@ -8,29 +8,31 @@ export default function ViewUser() {
     email: "",
     password: "",
     role: "",
+    slots_taken: [
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+    ],
   });
 
-  const [schedule, setSchedule] = useState({
-    slots_taken: [],
-  });
-
-
-  const { id , date} = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     loadUser();
-    loadSchedule();
   }, []);
 
   const loadUser = async () => {
-    const result = await axios.get(`http://localhost:8080/user/${id}`);
+    const result = await axios.get(`http://localhost:8080/api/users/${id}`);
     setUser(result.data);
   };
 
-  const loadSchedule = async () => {
-    const result = await axios.get(`http://localhost:8080/api/schedules/0/1`);
-    setSchedule(result.data);
-  };
+  const cellStyle = (isTaken) => ({
+    backgroundColor: isTaken ? "red" : "green",
+  });
 
   return (
     <div className="container">
@@ -58,27 +60,33 @@ export default function ViewUser() {
             </div>
           </div>
 
-
-          <table class="table table-sm">
-  <thead>
-    <tr>
-      <th scope="col">9-10</th>
-      <th scope="col">10-11</th>
-    </tr>
-  </thead>
-  <tbody>
-  
-
-<tr class="bg-success"><td class="bg-primary">{schedule.slots_taken[0]}</td>
-  <td class="bg-success">{schedule.slots_taken[0]}</td></tr>
-<tr class="bg-danger"><td class="bg-primary">...</td>
-  <td class="bg-success">...</td></tr>
-
-
-
-  </tbody>
-</table>
-
+          <div class="table-responsive">
+          <table class="table table-bordered">
+          <thead>
+      <tr>
+        <th>Column 1</th>
+        <th>Column 2</th>
+        <th>Column 3</th>
+        <th>Column 4</th>
+        <th>Column 5</th>
+        <th>Column 6</th>
+        <th>Column 7</th>
+        <th>Column 8</th>
+      </tr>
+    </thead>
+            <tbody>
+              {user.slots_taken.map((row, i) => (
+                <tr key={i}>
+                  {row.map((isTaken, j) => (
+                    <td key={`${i}-${j}`} style={cellStyle(isTaken)}>
+                      {isTaken ? "Taken" : "Available"}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          </div>
 
           <Link className="btn btn-primary my-2" to={"/"}>
             Back to Home

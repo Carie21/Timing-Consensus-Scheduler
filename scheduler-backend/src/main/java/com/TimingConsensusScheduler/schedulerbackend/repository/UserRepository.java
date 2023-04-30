@@ -2,14 +2,13 @@ package com.TimingConsensusScheduler.schedulerbackend.repository;
 
 import com.TimingConsensusScheduler.schedulerbackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
+@EnableJpaRepositories
+@Repository
 public interface UserRepository extends JpaRepository<User,Long> {
-    @Query("from User where email=?1")
-    public List<User> findByEMAIL(String email);
-
-    @Query("from User where email=?1 and password=?2")
-    public User findByEmailPassword(String email,String password);
+    boolean existsByEmail(String email);
+    User findByEmail(String email);
 }

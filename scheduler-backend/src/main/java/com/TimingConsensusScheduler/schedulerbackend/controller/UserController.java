@@ -56,41 +56,9 @@ public class UserController {
         }
     }
 
-//    @PostMapping("/user")
-//    User newUser(@RequestBody User newUser){
-////        Schedule _schedule = new Schedule(newUser.getMember_id());
-//        scheduleRepository.save(new Schedule(newUser.getMember_id()));
-//        return userRepository.save(newUser);
-//    }
 
-//    @GetMapping("/users")
-//    List<User> getAllUsers(){
-//        return userRepository.findAll();
-//    }
 
-//    @GetMapping("/user/{id}")
-//    User getUserById(@PathVariable Long id){
-//        return userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
-//    }
 
-//    @PutMapping("/users/{id}")
-//    User updateUser(@RequestBody User newUser, @PathVariable Long id){
-//        return userRepository.findById(id).map(user->{
-//            user.setMember_name(newUser.getMember_name());
-//            user.setPassword(newUser.getPassword());
-//            user.setEmail(newUser.getEmail());
-//            return userRepository.save(user);
-//        }).orElseThrow(()->new UserNotFoundException(id));
-//    }
-//
-//    @DeleteMapping("/user/{id}")
-//    String deleteUser(@PathVariable Long id){
-//        if(!userRepository.existsById(id)){
-//            throw new UserNotFoundException(id);
-//        }
-//        userRepository.deleteById(id);
-//        return  "User with id "+id+" has been deleted successfully.";
-//    }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {

@@ -8,6 +8,7 @@ import AddUser from './users/AddUser';
 import EditUser from './users/EditUser';
 import ViewUser from "./users/ViewUser";
 import Register from './pages/Register';
+import Test from "./pages/Test"
 
 function App() {
   return (
@@ -16,10 +17,11 @@ function App() {
         <Navbar/>
 
         <Routes>
-          <Route exact path='/:id' element = {<Home/>}/>
-          <Route exact path='/adduser' element = {<Register/>}/>
+          <Route exact path='/dashboard/:id' element = {<Home/>}/>
+          <Route exact path='/register' element = {<Register/>}/>
           <Route exact path ='/edituser/:id' element = {<EditUser/>} />
           <Route exact path="/viewuser/:id" element={<ViewUser />} />
+          <Route exact path="/test/:id" element={<Test />} />
         </Routes>
       </Router>
     </div>

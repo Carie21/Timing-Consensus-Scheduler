@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
 export default function Home() {
+    
   const [user2, setUser2] = useState({
     member_name: "",
     email: "",
@@ -35,57 +36,84 @@ export default function Home() {
     ],
   });
 
-  // const [formName, setformName] = useState({
-  //   member_name: "",
-  //   join: false,
-  // });
+  const [tableData, setTableData] = useState({
+    slots_taken: [
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+    ],
+  });
 
-  const handleCellClick = (row, col) => {
-    const newSlotsTaken = user.slots_taken.map((rowArr, i) =>
-      i === row ? rowArr.map((isTaken, j) => (j === col ? !isTaken : isTaken)) : rowArr
-    );
-    setUser({ ...user, slots_taken: newSlotsTaken });
-  };
+  const [formName, setFormName] = useState({ name: ''});
+
+  const [refreshTable, setRefreshTable] = useState(false);
 
   const { id } = useParams();
 
   useEffect(() => {
     loadUser();
-  }, []);
+  }, );
+
+
+  useEffect(() => {
+    const result = [];
+  for (let i = 0; i < user.slots_taken.length; i++) {
+    const row = [];
+    for (let j = 0; j < user.slots_taken[0].length; j++) {
+      row.push(Boolean(user.slots_taken[i][j] + user2.slots_taken[i][j]));
+    }
+    result.push(row);
+    }
+    setTableData(result);
+  }, [user2]);
+
+
+
+  useEffect(() => {
+    console.log(tableData);
+    setRefreshTable(true)
+  }, [tableData]);
+
+
+
 
   const loadUser = async () => {
     const result = await axios.get(`http://localhost:8080/api/users/${id}`);
     setUser(result.data);
   };
 
-  const loadUser2 = async () => {
-    const result = await axios.get(`http://localhost:8080/api/users2/${user2.member_name}`);
-    setUser2(result.data);
-  };
-
-  useEffect(() => {
-    loadUser2();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.get(`http://localhost:8080/api/users/${id}`);
-      console.log(res.data);
-    } catch (error) {
-      console.error(error);
-    }
+    const result = await axios.get(`http://localhost:8080/api/users/${Number(formName.name)}`);
+    await setUser2(result.data);
+    // console.log(user2.slots_taken);
+    
   };
+
+  const handleRefresh = () => {
+    setRefreshTable(true);
+  };
+
   
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormName({ ...formName, [name]: value });
+  };
 
-  // const deleteUser = async (id) => {
-  //   await axios.delete(`http://localhost:8080/user/${id}`);
-  //   loadUsers();
-  // };
-
-  const cellStyle = (isTaken) => ({
-    backgroundColor: isTaken ? "red" : "green",
-  });
+  const cellStyle = (isTaken) => {
+    const color = isTaken ? "red" : "green";
+    return {
+      backgroundColor: color,
+      color: "white",
+      fontWeight: "bold",
+      textAlign: "center",
+    };
+  };
 
   return (
     <div class="container">
@@ -124,21 +152,23 @@ export default function Home() {
     </div>
     <div class="col-md-10">
       <h2 class="text-center">View Other Person's Schedule</h2>
-      <div class="form-group" onSubmit={handleSubmit}>
-        <label for="personName">Person's Name</label>
-        <input type="text" class="form-control" id="personName" placeholder="Enter name"/>
-      </div>
+      <form onSubmit={handleSubmit}>
       <div class="form-group">
-        <label for="scheduleType">Schedule Type</label>
-        <select class="form-control" id="scheduleType">
-          <option>Joint</option>
-          <option>Individual</option>
-        </select>
+        <label for="personName">Person's Name</label>
+        <input type="text" class="form-control" 
+        name="name"
+        value={formName.name}
+        onChange={handleChange}
+        id="personName"  placeholder="Enter name"></input>
       </div>
-      <button class="btn btn-primary">View Schedule</button>
+      
+      <button class="btn btn-primary"
+      type="submit">View Schedule</button>
+      </form>
       <div class="mt-4">
         <h4>Other Person's Schedule</h4>
         <div class="table-responsive">
+        
           <table class="table table-bordered">
             <thead>
               <tr>
@@ -154,33 +184,62 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Monday</td>
-                <td>Taken</td>
-                <td>Available</td>
-                <td>Available</td>
-                <td>Taken</td>
-                <td>Available</td>
-                <td>Taken</td>
-                <td>Available</td>
+            {user2.slots_taken.map((row, i) => (
+              <tr key={i}>
+                <td>{i + 1}</td>
+                {row.map((isTaken, j) => (
+                  <td key={`${i}-${j}`} style={cellStyle(isTaken)}>
+                    {isTaken ? "Taken" : "Available"}
+                  </td>
+                ))}
               </tr>
-              <tr>
-                <td>Tuesday</td>
-                <td>Available</td>
-                <td>Available</td>
-                <td>Taken</td>
-                <td>Available</td>
-                <td>Taken</td>
-                <td>Available</td>
-                <td>Taken</td>
-              </tr>
-            </tbody>
+            ))}
+          </tbody>
+
           </table>
         </div>
       </div>
     </div>
+
+    <div class="mt-4">
+        <h4>Joint Schedule</h4>
+        <div class="table-responsive">
+        
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+              <th>Day</th>
+              <th>9-10</th>
+              <th>10-11</th>
+              <th>11-12</th>
+              <th>12-1</th>
+              <th>1-2</th>
+              <th>2-3</th>
+              <th>3-4</th>
+              <th>4-5</th>
+              </tr>
+            </thead>
+            <tbody>
+            {user2.slots_taken.map((row, i) => (
+              <tr key={i}>
+                <td>{i + 1}</td>
+                {row.map((isTaken, j) => (
+                  <td key={`${i}-${j}`} style={cellStyle(isTaken)}>
+                    {isTaken ? "Taken" : "Available"}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+
+          </table>
+        </div>
+        </div>
+ 
+
   </div>
 </div>
 
   );
 }
+

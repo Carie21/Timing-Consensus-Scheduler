@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+// import { useSelector } from 'react-redux'
 
 export default function Home() {
     
@@ -36,8 +37,8 @@ export default function Home() {
     ],
   });
 
-  const [tableData, setTableData] = useState({
-    slots_taken: [
+  const [tableData, setTableData] = useState(
+    [
       [false, false, false, false, false, false, false, false],
       [false, false, false, false, false, false, false, false],
       [false, false, false, false, false, false, false, false],
@@ -46,13 +47,29 @@ export default function Home() {
       [false, false, false, false, false, false, false, false],
       [false, false, false, false, false, false, false, false],
     ],
-  });
+  );
+  console.log(tableData)
+
+  const { id } = useParams();
 
   const [formName, setFormName] = useState({ name: ''});
 
-  const [refreshTable, setRefreshTable] = useState(false);
 
-  const { id } = useParams();
+// const [homeuser, setHomeUser] = useState(null);
+//   const token = useSelector((state) => state.token);
+
+//   const getUser = async () => {
+//     const response = await fetch(`http://localhost:8080/users/${id}`, {
+//       method: "GET",
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+//     const data = await response.json();
+//     setHomeUser(data);
+//   };
+
+//   if(!homeuser) return null;
+
+ 
 
   useEffect(() => {
     loadUser();
@@ -75,11 +92,11 @@ export default function Home() {
 
   useEffect(() => {
     console.log(tableData);
-    setRefreshTable(true)
   }, [tableData]);
 
 
 
+console.log(tableData);
 
   const loadUser = async () => {
     const result = await axios.get(`http://localhost:8080/users/${id}`);
@@ -93,10 +110,6 @@ export default function Home() {
     await setUser2(result.data);
     // console.log(user2.slots_taken);
     
-  };
-
-  const handleRefresh = () => {
-    setRefreshTable(true);
   };
 
   
@@ -114,6 +127,8 @@ export default function Home() {
       textAlign: "center",
     };
   };
+
+  console.log(tableData)
 
   return (
     <div class="container">
@@ -148,6 +163,7 @@ export default function Home() {
             ))}
           </tbody>
         </table>
+        {console.log(tableData)}
       </div>
     </div>
     <div class="col-md-10">
@@ -197,6 +213,7 @@ export default function Home() {
           </tbody>
 
           </table>
+          {console.log(tableData)}
         </div>
       </div>
     </div>
@@ -219,8 +236,9 @@ export default function Home() {
               <th>4-5</th>
               </tr>
             </thead>
+            {console.log(tableData)}
             <tbody>
-            {tableData.slots_taken && tableData.slots_taken.map((row, i) => (
+            {tableData.map((row, i) => (
               <tr key={i}>
                 <td>{i + 1}</td>
                 {row.map((isTaken, j) => (
@@ -231,6 +249,7 @@ export default function Home() {
               </tr>
             ))}
           </tbody>
+          
 
           </table>
         </div>
@@ -245,4 +264,3 @@ export default function Home() {
 
   );
 }
-

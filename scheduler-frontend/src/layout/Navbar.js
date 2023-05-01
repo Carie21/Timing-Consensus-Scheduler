@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+
 export default function Navbar() {
   return (
     <div>
@@ -11,7 +12,7 @@ export default function Navbar() {
           </div>
           
 
-          <Link className="btn btn-outline-light" to="/register">
+          <Link className="btn btn-outline-light" to="/users/new">
             Register
           </Link>
         </div>

@@ -117,7 +117,7 @@ export default function Home() {
 
   return (
     <div class="container">
-  <div class="row mt-5">
+  {/* <div class="row mt-5">
     <div class="col-md-10">
       <h2 class="text-center">My Schedule</h2>
       <div class="table-responsive">
@@ -199,7 +199,7 @@ export default function Home() {
           </table>
         </div>
       </div>
-    </div>
+    </div> */}
 
     <div class="mt-4">
         <h4>Joint Schedule</h4>
@@ -238,7 +238,7 @@ export default function Home() {
  
 
   </div>
-</div>
+
 
   );
 }

@@ -10,16 +10,17 @@ const Register = () => {
     member_name: '',
     email: '',
     password: '',
-    role: false,
+    role: '',
   });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
       await axios.post(
-        'http://localhost:8080/api/register',
+        'http://localhost:8080/users/new',
         user
       );
-      navigate("/");
+      
+      navigate(`/users/${user.email}`);
     
   };
 
@@ -79,8 +80,8 @@ const Register = () => {
                 value={user.role}
                 onChange={handleChange}
                 >
-                <option value={true}>Admin</option>
-                <option value={false}>User</option>
+                <option value="ADMIN">Teacher</option>
+                <option value="USER">Student</option>
                 </select>
             </div>
             <button type="submit" className="btn btn-primary">
@@ -88,7 +89,7 @@ const Register = () => {
             </button>
           </form>
           <p className="mt-3">
-            Already have an account? <Link to="/login">Login</Link>
+            Already have an account? <Link to="http://localhost:8080/users/login">Login</Link>
           </p>
         </div>
       </div>

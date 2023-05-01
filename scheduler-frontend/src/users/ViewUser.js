@@ -26,7 +26,7 @@ export default function ViewUser() {
   }, []);
 
   const loadUser = async () => {
-    const result = await axios.get(`http://localhost:8080/api/users/${id}`);
+    const result = await axios.get(`http://localhost:8080/users/${id}`);
     setUser(result.data);
   };
 
@@ -42,11 +42,11 @@ export default function ViewUser() {
 
           <div className="card">
             <div className="card-header">
-              Details of user id : {user.member_id}
+              Details of user id : {user.id}
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
                   <b>Name:</b>
-                  {user.member_name}
+                  {user.name}
                 </li>
                 <li className="list-group-item">
                   <b>email:</b>

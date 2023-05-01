@@ -18,10 +18,10 @@ function App() {
 
         <Routes>
           <Route exact path='/dashboard/:id' element = {<Home/>}/>
-          <Route exact path='/register' element = {<Register/>}/>
+          <Route exact path='/users/new' element = {<Register/>}/>
           <Route exact path ='/edituser/:id' element = {<EditUser/>} />
-          <Route exact path="/viewuser/:id" element={<ViewUser />} />
-          <Route exact path="/test/:id" element={<Test />} />
+          <Route exact path="/users/:id" element={<Home />} />
+          <Route exact path="/users/joint" element={<Test />} />
         </Routes>
       </Router>
     </div>

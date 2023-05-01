@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router-dom";
 export default function Home() {
     
   const [user2, setUser2] = useState({
-    member_name: "",
+    name: "",
     email: "",
     password: "",
     role: "",
@@ -21,7 +21,7 @@ export default function Home() {
   });
 
   const [user, setUser] = useState({
-    member_name: "",
+    name: "",
     email: "",
     password: "",
     role: "",
@@ -82,14 +82,14 @@ export default function Home() {
 
 
   const loadUser = async () => {
-    const result = await axios.get(`http://localhost:8080/api/users/${id}`);
+    const result = await axios.get(`http://localhost:8080/users/${id}`);
     setUser(result.data);
   };
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await axios.get(`http://localhost:8080/api/users/${Number(formName.name)}`);
+    const result = await axios.get(`http://localhost:8080/users/${formName.name}`);
     await setUser2(result.data);
     // console.log(user2.slots_taken);
     
@@ -220,7 +220,7 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-            {user2.slots_taken.map((row, i) => (
+            {tableData.slots_taken && tableData.slots_taken.map((row, i) => (
               <tr key={i}>
                 <td>{i + 1}</td>
                 {row.map((isTaken, j) => (
@@ -235,6 +235,9 @@ export default function Home() {
           </table>
         </div>
         </div>
+        <Link className="btn btn-outline-light" to={`/edituser/${id}`}>
+            edit
+          </Link>
  
 
   </div>

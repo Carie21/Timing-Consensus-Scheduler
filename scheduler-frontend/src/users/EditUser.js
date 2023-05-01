@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 
 export default function ViewUser() {
   const [user, setUser] = useState({
-    member_name: "",
+    name: "",
     email: "",
     password: "",
     role: "",
@@ -21,7 +21,7 @@ export default function ViewUser() {
   }, []);
 
   const loadUser = async () => {
-    const result = await axios.get(`http://localhost:8080/api/users/${id}`);
+    const result = await axios.get(`http://localhost:8080/users/${id}`);
     setUser(result.data);
   };
 
@@ -40,7 +40,7 @@ export default function ViewUser() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`http://localhost:8080/api/users/${id}`, user);
+      const res = await axios.put(`http://localhost:8080/users/${id}`, user);
       console.log(res.data);
     } catch (error) {
       console.error(error);
@@ -55,11 +55,11 @@ export default function ViewUser() {
 
           <div className="card">
             <div className="card-header">
-              Details of user id : {user.member_id}
+              Details of user id : {user.id}
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
                   <b>Name:</b>
-                  {user.member_name}
+                  {user.name}
                 </li>
                 <li className="list-group-item">
                   <b>email:</b>
@@ -97,7 +97,7 @@ export default function ViewUser() {
             </button>
           </form>
 
-          <Link className="btn btn-secondary my-2" to={"/"}>
+          <Link className="btn btn-secondary my-2" to={`/users/${id}`}>
             Cancel
           </Link>
         </div>

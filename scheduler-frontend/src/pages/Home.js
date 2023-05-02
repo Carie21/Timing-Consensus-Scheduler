@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 // import { useSelector } from 'react-redux'
 
 export default function Home() {
+  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday'];
+
     
   const [user2, setUser2] = useState({
     name: "",
@@ -131,10 +133,16 @@ console.log(tableData);
   console.log(tableData)
 
   return (
-    <div class="container">
-  <div class="row mt-5">
-    <div class="col-md-10">
+    
+    <div class="container py-4">
+    
+  <div class="row justify-content-center">
+  <div class="col-md-10">
+  
       <h2 class="text-center">My Schedule</h2>
+      <Link className="btn btn-primary btn-md mt-2 mb-3 mx-2" to={`/edituser/${id}`}>
+            Edit My Details
+          </Link>
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
@@ -153,7 +161,7 @@ console.log(tableData);
           <tbody>
             {user.slots_taken.map((row, i) => (
               <tr key={i}>
-                <td>{i + 1}</td>
+                <td>{daysOfWeek[i]}</td>
                 {row.map((isTaken, j) => (
                   <td key={`${i}-${j}`} style={cellStyle(isTaken)}>
                     {isTaken ? "Taken" : "Available"}
@@ -163,26 +171,25 @@ console.log(tableData);
             ))}
           </tbody>
         </table>
-        {console.log(tableData)}
       </div>
     </div>
+    <div class="row justify-content-center mt-5">
     <div class="col-md-10">
-      <h2 class="text-center">View Other Person's Schedule</h2>
+      <h2 class="text-center">View Other User's Schedule</h2>
       <form onSubmit={handleSubmit}>
-      <div class="form-group">
-        <label for="personName">Person's Name</label>
+      <div class="form-group ">
         <input type="text" class="form-control" 
         name="name"
         value={formName.name}
         onChange={handleChange}
-        id="personName"  placeholder="Enter name"></input>
+        id="personName"  placeholder="Enter email"></input>
       </div>
       
-      <button class="btn btn-primary"
+      <button class="btn btn-primary mt-3" 
       type="submit">View Schedule</button>
       </form>
       <div class="mt-4">
-        <h4>Other Person's Schedule</h4>
+        <h4>Other User's Schedule</h4>
         <div class="table-responsive">
         
           <table class="table table-bordered">
@@ -202,7 +209,7 @@ console.log(tableData);
             <tbody>
             {user2.slots_taken.map((row, i) => (
               <tr key={i}>
-                <td>{i + 1}</td>
+                <td>{daysOfWeek[i]}</td>
                 {row.map((isTaken, j) => (
                   <td key={`${i}-${j}`} style={cellStyle(isTaken)}>
                     {isTaken ? "Taken" : "Available"}
@@ -218,8 +225,9 @@ console.log(tableData);
       </div>
     </div>
 
-    <div class="mt-4">
-        <h4>Joint Schedule</h4>
+    <div class="row justify-content-center mt-5">
+    <div class="col-md-10">
+    <h2 class="text-center">View Joint Schedule</h2>
         <div class="table-responsive">
         
           <table class="table table-bordered">
@@ -240,7 +248,7 @@ console.log(tableData);
             <tbody>
             {tableData.map((row, i) => (
               <tr key={i}>
-                <td>{i + 1}</td>
+                <td>{daysOfWeek[i]}</td>
                 {row.map((isTaken, j) => (
                   <td key={`${i}-${j}`} style={cellStyle(isTaken)}>
                     {isTaken ? "Taken" : "Available"}
@@ -254,12 +262,9 @@ console.log(tableData);
           </table>
         </div>
         </div>
-        <Link className="btn btn-outline-light" to={`/edituser/${id}`}>
-            edit
-          </Link>
- 
-
   </div>
+</div>
+</div>
 </div>
 
   );

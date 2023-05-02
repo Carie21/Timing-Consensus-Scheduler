@@ -34,14 +34,31 @@ public class SecurityConfig {
         return new UserInfoUserDetailsService();
     }
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+//                .anyRequest().authenticated()
+//                .and()
+//                .oauth2Login().successHandler((req, res, auth) -> {
+//                            String username = auth.getName();
+//                            res.sendRedirect("http://localhost:3000/users/user@gmail.com" + username);
+//                        });
+//        return http.build();
+//    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/new","/api/login2").permitAll()
+                .requestMatchers("/users/**").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/admin")
-                .authenticated().and().formLogin().and().build();
+                .authorizeHttpRequests().requestMatchers("/users/login2")
+                .authenticated().and().formLogin(form -> form
+                        .loginPage("/users/login").successHandler((req, res, auth) -> {
+                            String username = auth.getName();
+                            res.sendRedirect("http://localhost:3000/users/" + username);
+                        })
+                        .permitAll()).build();
     }
     @Bean
     public PasswordEncoder passwordEncoder() {

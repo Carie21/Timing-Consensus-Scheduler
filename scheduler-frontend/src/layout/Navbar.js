@@ -10,10 +10,8 @@ export default function Navbar() {
         <div className="navbar-brand">
             Timing Consensus Scheduler
           </div>
-          
-
-          <Link className="btn btn-outline-light" to="/users/new">
-            Register
+            <Link className="btn btn-outline-light" to="/user/new">
+            Logout
           </Link>
         </div>
       </nav>

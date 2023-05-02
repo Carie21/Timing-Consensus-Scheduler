@@ -7,7 +7,7 @@ const Register = () => {
   let navigate = useNavigate();
 
   const [user, setuser] = useState({
-    member_name: '',
+    name: '',
     email: '',
     password: '',
     role: '',
@@ -40,9 +40,9 @@ const Register = () => {
               <input
                 type="text"
                 className="form-control"
-                id="member_name"
-                name="member_name"
-                value={user.member_name}
+                id="name"
+                name="name"
+                value={user.name}
                 onChange={handleChange}
                 required
               />
